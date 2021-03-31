@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definition:ConnectorDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:definition="http://www.bonitasoft.org/ns/connector/definition/6.1">
-  <id>custom-user-max-tasks-infoZZ</id>
-  <version>1.0.0</version>
+  <id>${definition-id}</id>
+  <version>${definition-version}</version>
   <category icon="actors_mapping.png" id="organization"/>
   <input mandatory="true" name="customUserInfoGeoName" type="java.lang.String"/>
   <input mandatory="true" name="customUserInfoGeoValue" type="java.lang.String"/>

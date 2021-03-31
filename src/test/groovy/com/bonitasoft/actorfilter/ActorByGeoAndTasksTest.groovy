@@ -42,7 +42,7 @@ class ActorByGeoAndTasksTest extends Specification {
         processApi.getUserIdsForActor(_ as Long, 'MyActor', 0, Integer.MAX_VALUE) >> [1L, 2L, 3L]
         processApi.getNumberOfAssignedHumanTaskInstances(1L) >> 20L
         processApi.getNumberOfAssignedHumanTaskInstances(2L) >> 9L
-        processApi.getNumberOfAssignedHumanTaskInstances(3L) >> 7L
+        processApi.getNumberOfAssignedHumanTaskInstances(3L) >> 2L
 
         def geoDef = new CustomUserInfoDefinitionImpl(id: 456L, name: 'geo', description: null)
         def maxDef = new CustomUserInfoDefinitionImpl(id: 789L, name: 'maxTasks', description: null)
@@ -85,7 +85,6 @@ class ActorByGeoAndTasksTest extends Specification {
         def candidates = filter.filter("MyActor")
 
         then: 'Only users with a workload below the maximum are returned as candidates'
-        candidates == [2L]
-
+        candidates == [3L]
     }
 }

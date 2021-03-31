@@ -6,7 +6,6 @@ import org.bonitasoft.engine.connector.ConnectorValidationException
 import org.bonitasoft.engine.filter.AbstractUserFilter
 import org.bonitasoft.engine.filter.UserFilterException
 import org.bonitasoft.engine.identity.CustomUserInfoDefinition
-import org.bonitasoft.engine.identity.User
 
 @Slf4j
 class ActorByGeoAndTasks extends AbstractUserFilter {
@@ -52,25 +51,47 @@ class ActorByGeoAndTasks extends AbstractUserFilter {
 
         def apiAccessor = getAPIAccessor()
         def processAPI = apiAccessor.getProcessAPI()
-        def users = processAPI.getUserIdsForActor(getExecutionContext().getProcessDefinitionId(), actorName, 0, Integer.MAX_VALUE);
+        def userIds = processAPI.getUserIdsForActor(getExecutionContext().getProcessDefinitionId(), actorName, 0, Integer.MAX_VALUE);
 
         List<CustomUserInfoDefinition> customUserInfoDefinitions = apiAccessor.getIdentityAPI().getCustomUserInfoDefinitions(0, 10)
         def geoDefinition = customUserInfoDefinitions.find { it.name == geoInputName }
         def maxTasksDefinition = customUserInfoDefinitions.find { it.name == maximumWorkload }
 
-        users.findAll { isCandidate(it, apiAccessor, geoDefinition, maxTasksDefinition) }
+        def assignCandidates = []
+        def geoCandidates = userIds.findAll { isGeoCandidate(it, apiAccessor, geoDefinition) }
+        geoCandidates.each { userId ->
+            def customUserInfos = apiAccessor.getIdentityAPI().getCustomUserInfo(userId, 0, customUserInfoDefinitions.size())
+            def maxTaskAttribute = customUserInfos.find { (it.getDefinition().id == maxTasksDefinition.id) }
+            long assigned = apiAccessor.getProcessAPI().getNumberOfAssignedHumanTaskInstances(userId)
+            long maxTasks = maxTaskAttribute?.value?.toLong()
+            assignCandidates.add([userId: userId, max: maxTasks, assigned: assigned, available: (maxTasks - assigned) as long])
+        }
+        log.info("found ${geoCandidates.size()} matching candidates [${geoInputName}=${geoInputValue}]")
+        assignCandidates.sort { a, b ->
+            a.available == b.available ? 0 : a.available > b.available ? -1 : 1
+        }
+        def taskCandidates = assignCandidates.findAll {
+            it.available > 0
+        }
+        taskCandidates.each {
+            log.debug("isMaxTaskCandidate : ${it.toString()}")
+        }
+        log.info("found ${taskCandidates.size()} matching candidates [${maximumWorkload} > assigned tasks]")
+        if (taskCandidates.size()>0) {
+            def matching = taskCandidates[0]
+            log.info("return geo matching candidates")
+            return [matching.userId]
+        } else {
+            log.info("return candidate ${matching.toString()} ")
+            return geoCandidates
+        }
     }
 
-    boolean isCandidate(Long userId, APIAccessor apiAccessor, geoDefinition, maxTasksDefinition) {
+    boolean isGeoCandidate(Long userId, APIAccessor apiAccessor, geoDefinition) {
         def customUserInfos = apiAccessor.getIdentityAPI().getCustomUserInfo(userId, 0, 10)
         def geoAttribute = customUserInfos.find { (it.getDefinition().id == geoDefinition.id) }
-        def maxTaskAttribute = customUserInfos.find { (it.getDefinition().id == maxTasksDefinition.id) }
-
-        long maxTasks = maxTaskAttribute?.value?.toLong()
-        long assigned = apiAccessor.getProcessAPI().getNumberOfAssignedHumanTaskInstances(userId)
-        def candidate = (assigned < maxTasks) && ((geoAttribute?.value) == geoInputValue)
-
-        log.debug "user ${userId} | assigned: ${assigned} | max: ${maxTasks} | geoAttribute: ${geoAttribute?.value} | candidate:${candidate}"
+        def candidate = (geoAttribute?.value) == geoInputValue
+        log.debug "isGeoCandidate : user ${userId} | geoAttribute: ${geoAttribute?.value} | candidate:${candidate}"
         candidate
     }
 
