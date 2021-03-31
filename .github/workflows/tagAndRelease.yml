@@ -10,28 +10,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: master
 
       - name: Install Java and Maven
         uses: actions/setup-java@v1.4.3
         with:
-          java-version: 8
+          java-version: 11
           server-id: github
 
+      - name: Configure Git user
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
       - name: Build and test
         run: ./mvnw clean verify
 
+      - name: Check plugins
+        run: ./mvnw versions:display-plugin-updates
+
       - name: Prepare release
         run: ./mvnw release:prepare
-
-      - uses: qcastel/github-actions-maven-release@master
-        with:
-          release-branch-name: "master"
-          git-release-bot-name: "release-bot"
-          git-release-bot-email: "release-bot@github.com"
-          skip-perform: true
-          access-token: ${{ secrets.GITHUB_TOKEN }}
 
   create-release:
     name: Create Release
@@ -43,6 +40,18 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: Install Java and Maven
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: 11
+          server-id: github
+
+      - name: Configure Git user
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+
       - name: 'Get Previous tag'
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@master"
@@ -55,23 +64,12 @@ jobs:
         with:
           ref: ${{ steps.previoustag.outputs.tag }}
 
-      - name: Install Java and Maven
-        uses: actions/setup-java@v1
-        with:
-          java-version: 8
-          server-id: github
-
-      #      - name: changelog
-      #        uses: scottbrenner/generate-changelog-action@master
-      #        id: Changelog
-      #        env:
-      #          REPO: ${{ github.repository }}
-
       - name: Build and test archetype
-        id: build-connector
+        id: build-and-test
         run: |
           echo "build ${{ steps.previoustag.outputs.tag }}"
           ./mvnw clean verify
+
       - name: Get version from pom
         id: get-version
         run: |
@@ -79,11 +77,13 @@ jobs:
           FINAL_NAME=$(./mvnw help:evaluate -Dexpression=project.build.finalName -q -DforceStdout )
           echo "::set-output name=version::$VERSION"
           echo "::set-output name=final-name::$FINAL_NAME"
+
       - name: Display version
         id: display-version
         run: |
           echo "version: ${{ steps.get-version.outputs.version }}"
           echo "final_name: ${{ steps.get-version.outputs.final-name }}"
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -94,7 +94,7 @@ jobs:
           release_name: ${{ steps.get-version.outputs.final-name }}
           body: |
             Content:
-            ${{ steps.get-version.outputs.final-name }}.zip
+            ${{ steps.build-and-test.outputs }}
           #            ${{ steps.Changelog.outputs.changelog }}
           draft: false
           prerelease: false
