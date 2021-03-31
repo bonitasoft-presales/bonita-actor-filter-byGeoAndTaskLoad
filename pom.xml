@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bonitasoft.actorfilter</groupId>
     <artifactId>actorByGeoAndTasks</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>actorByGeoAndTasks</name>
     <packaging>jar</packaging>
 
@@ -169,7 +168,7 @@
         <url>https://github.com/laurentleseigneur/bonita-actor-filter-byGeoAndTaskLoad</url>
         <connection>scm:git:${project.scm.url}.git</connection>
         <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>actorByGeoAndTasks-1.0</tag>
     </scm>
 
 </project>
