@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definition:ConnectorDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:definition="http://www.bonitasoft.org/ns/connector/definition/6.1">
-    <id>${definition-id}</id> <!-- Id of the definition -->
-    <version>${definition-version}</version> <!-- Version of the definition -->
-    <icon>icon.png</icon> <!-- The icon used in the Studio for this definition -->
-    <category icon="icon.png" id="Custom"/> <!-- The category of this definition, used in the Studio -->
-  
-    <!-- Actor filter inputs -->
-    <input mandatory="true" name="maximumWorkload" type="java.lang.Integer" defaultValue="3" />
-    
-    <!--
-       Pages and widgets to use the actorfilter in the Bonita Studio.
-       - Each widget must be bound to an input
-       - Page titles must be defined in the properties files
-       - Widget labels must be defined in the properties files
-       - Page and widget descriptions can be defined in the properties files (optional)
-    -->
-    <page id="defaultPage">
-        <widget xsi:type="definition:Text" id="maximumWorkloadWidget" inputName="maximumWorkload"/>
-    </page>
+  <id>custom-user-max-tasks-infoZZ</id>
+  <version>1.0.0</version>
+  <category icon="actors_mapping.png" id="organization"/>
+  <input mandatory="true" name="customUserInfoGeoName" type="java.lang.String"/>
+  <input mandatory="true" name="customUserInfoGeoValue" type="java.lang.String"/>
+  <input mandatory="true" name="customUserMaxTaskName" type="java.lang.String"/>
+  <input defaultValue="true" mandatory="false" name="autoAssign" type="java.lang.Boolean"/>
+  <page id="config">
+    <widget xsi:type="definition:Text" id="customUserInfoGeoName" inputName="customUserInfoGeoName"/>
+    <widget xsi:type="definition:Text" id="customUserInfoGeoValue" inputName="customUserInfoGeoValue"/>
+    <widget xsi:type="definition:Text" id="customUserMaxTaxName" inputName="customUserMaxTaxName"/>
+    <widget xsi:type="definition:Text" id="customUserMaxTaskName" inputName="customUserMaxTaskName"/>
+    <widget xsi:type="definition:Checkbox" id="autoAssign" inputName="autoAssign"/>
+  </page>
 </definition:ConnectorDefinition>
