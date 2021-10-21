@@ -29,7 +29,7 @@ jobs:
           echo "version: ${{ steps.get-version.outputs.version }}"
           echo "final_name: ${{ steps.get-version.outputs.final-name }}"
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: ${{ steps.get-version.outputs.final-name }}.zip
-          path: target/${{ steps.get-version.outputs.final-name }}.zip
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: ${{ steps.get-version.outputs.final-name }}.zip
+#          path: target/${{ steps.get-version.outputs.final-name }}.zip
