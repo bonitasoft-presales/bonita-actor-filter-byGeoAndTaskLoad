@@ -3,7 +3,7 @@
 
     <groupId>com.bonitasoft.actorfilter</groupId>
     <artifactId>actorByGeoAndTasks</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4</version>
     <name>actorByGeoAndTasks</name>
     <packaging>jar</packaging>
 
@@ -168,7 +168,7 @@
         <url>https://github.com/laurentleseigneur/bonita-actor-filter-byGeoAndTaskLoad</url>
         <connection>scm:git:${project.scm.url}.git</connection>
         <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>actorByGeoAndTasks-1.4</tag>
     </scm>
 
 </project>
