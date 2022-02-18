@@ -9,7 +9,7 @@
 
     <properties>
         <!-- Maven -->
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -171,7 +171,7 @@
         </plugins>
     </build>
     <scm>
-        <url>https://github.com/laurentleseigneur/bonita-actor-filter-byGeoAndTaskLoad</url>
+        <url>https://github.com/${github.owner}/${github.repo}</url>
         <connection>scm:git:${project.scm.url}.git</connection>
         <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
         <tag>HEAD</tag>
