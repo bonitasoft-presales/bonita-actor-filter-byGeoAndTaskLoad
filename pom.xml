@@ -3,7 +3,7 @@
 
     <groupId>com.bonitasoft.presales.filter</groupId>
     <artifactId>filter-geo-task-load</artifactId>
-    <version>1.6</version>
+    <version>1.7-SNAPSHOT</version>
     <name>actorByGeoAndTasks</name>
     <packaging>jar</packaging>
 
@@ -174,7 +174,7 @@
         <url>https://github.com/${github.owner}/${github.repo}</url>
         <connection>scm:git:${project.scm.url}.git</connection>
         <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
-        <tag>filter-geo-task-load-1.6</tag>
+        <tag>HEAD</tag>
     </scm>
     <distributionManagement>
         <snapshotRepository>
