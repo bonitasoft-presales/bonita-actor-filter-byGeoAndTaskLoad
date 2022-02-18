@@ -6,21 +6,27 @@ jobs:
   create-tag:
     name: Create Tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Java and Maven
-        uses: actions/setup-java@v1.4.3
+      - name: Install Java and Maven - setup settings.xml
+        uses: actions/setup-java@v2
         with:
           java-version: 11
+          distribution: 'temurin'
           server-id: github
+          cache: 'maven'
 
       - name: Configure Git user
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
+
       - name: Build and test
         run: ./mvnw clean verify
 
@@ -34,6 +40,9 @@ jobs:
     name: Create Release
     needs: create-tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout
@@ -41,11 +50,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Java and Maven
-        uses: actions/setup-java@v1.4.3
+      - name: Install Java and Maven - setup settings.xml
+        uses: actions/setup-java@v2
         with:
           java-version: 11
+          distribution: 'temurin'
           server-id: github
+          cache: 'maven'
 
       - name: Configure Git user
         run: |
@@ -64,7 +75,7 @@ jobs:
         with:
           ref: ${{ steps.previoustag.outputs.tag }}
 
-      - name: Build and test archetype
+      - name: Build and Test
         id: build-and-test
         run: |
           echo "build ${{ steps.previoustag.outputs.tag }}"
@@ -109,3 +120,8 @@ jobs:
           asset_path: target/${{ steps.get-version.outputs.final-name }}.zip
           asset_name: ${{ steps.get-version.outputs.final-name }}.zip
           asset_content_type: application/zip
+
+      - name: Publish to Github Package
+        run: ./mvnw --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
