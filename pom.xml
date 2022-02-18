@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.bonitasoft.actorfilter</groupId>
-    <artifactId>actorByGeoAndTasks</artifactId>
+    <groupId>com.bonitasoft.presales.filter</groupId>
+    <artifactId>filter-geo-task-load</artifactId>
     <version>1.6-SNAPSHOT</version>
     <name>actorByGeoAndTasks</name>
     <packaging>jar</packaging>
@@ -21,7 +21,8 @@
         <impl-main-class>com.bonitasoft.actorfilter.ActorByGeoAndTasks</impl-main-class>
 
         <!-- Bonita -->
-        <bonita.engine.version>7.11.4</bonita.engine.version>
+        <!-- keep .0 version for community artifacts -->
+        <bonita.engine.version>7.13.0</bonita.engine.version>
         <groovy-all.version>2.4.16</groovy-all.version>
 
         <!-- Test -->
@@ -37,6 +38,11 @@
         <groovy-maven-plugin.version>2.1.1</groovy-maven-plugin.version>
         <groovy-eclipse-compiler.version>3.6.0-01</groovy-eclipse-compiler.version>
         <groovy-eclipse-batch.version>2.4.16-03</groovy-eclipse-batch.version>
+
+        <!-- Github-->
+        <github.owner>bonitasoft-presales</github.owner>
+        <github.repo>${project.artifactId}</github.repo>
+
     </properties>
 
     <dependencies>
@@ -170,5 +176,16 @@
         <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
-
+    <distributionManagement>
+        <snapshotRepository>
+            <id>github</id>
+            <name>Github Package</name>
+            <url>https://maven.pkg.github.com/${github.owner}/${github.repo}</url>
+        </snapshotRepository>
+        <repository>
+            <id>github</id>
+            <name>Github Package</name>
+            <url>https://maven.pkg.github.com/${github.owner}/${github.repo}</url>
+        </repository>
+    </distributionManagement>
 </project>
