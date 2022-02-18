@@ -21,7 +21,8 @@
         <impl-main-class>com.bonitasoft.actorfilter.ActorByGeoAndTasks</impl-main-class>
 
         <!-- Bonita -->
-        <bonita.engine.version>7.13.3</bonita.engine.version>
+        <!-- keep .0 version for community artifacts -->
+        <bonita.engine.version>7.13.0</bonita.engine.version>
         <groovy-all.version>2.4.16</groovy-all.version>
 
         <!-- Test -->
