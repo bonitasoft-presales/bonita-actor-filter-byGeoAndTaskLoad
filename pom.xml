@@ -41,7 +41,7 @@
 
         <!-- Github-->
         <github.owner>bonitasoft-presales</github.owner>
-        <github.repo>bonita-actor-filter-byGeoAndTaskLoad</github.repo>
+        <github.repo>${project.artifactId}</github.repo>
 
     </properties>
 
